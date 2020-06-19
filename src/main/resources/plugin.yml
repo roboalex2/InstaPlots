@@ -1,0 +1,8 @@
+name: InstaPlots
+main: at.instaplots.Main
+description: InstaCube Plot System
+author: roboalex2
+version: ${project.version}
+api-version: 1.15
+load: STARTUP
+depend: [InstaBaseAPI]
