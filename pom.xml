@@ -75,32 +75,17 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.20</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.28</version>
-        </dependency>
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>3.4.5</version>
-        </dependency>
-        <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>4.0</version>
         </dependency>
-        <!-- <dependency>
+        <dependency>
             <groupId>at.instabase</groupId>
             <artifactId>InstaBaseAPI</artifactId>
             <version>1.0</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/../../alex goes live/intellij-projekts/InstaBaseAPI/target/InstaBaseAPI-1.0-SNAPSHOT.jar</systemPath>
-        </dependency> -->
+        </dependency>
     </dependencies>
 
 </project>
