@@ -32,7 +32,7 @@ public class Main extends JavaPlugin {
         PluginManager mgnt = Bukkit.getPluginManager();
         getCommand("plot").setExecutor(injector.getInstance(CmdPlot.class));
 
-        borderMgnt.runSetBorderBlockLoop();
+        borderMgnt.runBorderBlockLoop();
     }
 
     @Override

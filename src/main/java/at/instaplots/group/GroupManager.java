@@ -1,5 +1,8 @@
 package at.instaplots.group;
 
+import at.instaplots.Main;
+import com.google.inject.Inject;
+
 import java.util.UUID;
 
 public class GroupManager {
@@ -10,7 +13,21 @@ public class GroupManager {
     private Group everyone;
     private Group banned;
 
+    public GroupManager() {
+        this.owner = owner;
+        this.trusted = trusted;
+        this.worker = worker;
+        this.everyone = everyone;
+        this.banned = banned;
+    }
 
+    public GroupManager(Group owner, Group trusted, Group worker, Group everyone, Group banned) {
+        this.owner = owner;
+        this.trusted = trusted;
+        this.worker = worker;
+        this.everyone = everyone;
+        this.banned = banned;
+    }
 
     public Group getPlayersGroup(UUID uuid) {
         if(owner.contains(uuid)) return owner;

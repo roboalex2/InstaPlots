@@ -5,6 +5,7 @@ import at.instaplots.world.region.RegionManager;
 import at.instaplots.world.region.area.Area;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class PlotManager {
 
 
     public void createPlot(UUID uuid, Location loc, int size) {
+        if(Bukkit.isPrimaryThread()) throw new RuntimeException("Only Async calls allowed.");
         // TODO createPlot
     }
 

@@ -79,19 +79,16 @@ public class CmdPlot implements CommandExecutor {
                             return;
                         }
                     }
-                    UUID finalTarget = target;
-                    int finalSize = size;
-                    (new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            plotMgnt.createPlot(finalTarget, player.getLocation(), finalSize);
-                        }
-                    }).runTask(plugin);
-
+                    plotMgnt.createPlot(target, player.getLocation(), size);
                 }
             }).runTaskAsynchronously(plugin);
         } else {
-            plotMgnt.createPlot(player.getUniqueId(), player.getLocation(), DEFAULT_PLOT_SIZE);
+            (new BukkitRunnable() {
+                @Override
+                public void run() {
+                    plotMgnt.createPlot(player.getUniqueId(), player.getLocation(), DEFAULT_PLOT_SIZE);
+                }
+            }).runTaskAsynchronously(plugin);
         }
     }
 

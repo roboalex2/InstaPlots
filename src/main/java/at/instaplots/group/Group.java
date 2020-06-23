@@ -16,4 +16,12 @@ public class Group {
     public boolean contains(UUID uuid) {
         return players.contains(uuid);
     }
+
+    public void addPlayer(UUID uuid) {
+        players.add(uuid);
+    }
+
+    public void removePlayer(UUID uuid) {
+        players.remove(uuid);
+    }
 }
