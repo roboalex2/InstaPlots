@@ -1,16 +1,14 @@
 package at.instaplots.world.region;
 
-import at.instaplots.world.region.area.Area;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RegionManager {
 
 
-    private final HashMap<Long, Region> regions = new HashMap<>();
+    private final ConcurrentHashMap<Long, Region> regions = new ConcurrentHashMap<>();
 
 
     public Region getRegion(long key) {
@@ -28,20 +26,7 @@ public class RegionManager {
     }
 
 
-    public Area isInArea(Location loc) {
-        Region region = getRegion(loc);
-        Area area = region.getAreaManager().inArea(loc);
-        if(area != null) return area;
-
-        for(Region reg : getSurroundingRegions(region)) {
-            area = reg.getAreaManager().inArea(loc);
-            if(area != null) return area;
-        }
-        return null;
-    }
-
-
-    private ArrayList<Region> getSurroundingRegions(Region region) {
+    public ArrayList<Region> getSurroundingRegions(Region region) {
         int x = region.getX();
         int z = region.getZ();
         ArrayList<Region> regs = new ArrayList<>();

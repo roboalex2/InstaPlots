@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -32,25 +33,27 @@ public class BorderManager {
             @Override
             public void run() {
                 long time = System.currentTimeMillis();
-                while(!newBorderBlocks.isEmpty() && ((System.currentTimeMillis() - time) < 30)) {
+                while(!newBorderBlocks.isEmpty() && ((System.currentTimeMillis() - time) < 15)) {
                     Location loc = newBorderBlocks.poll();
                     int y = loc.getWorld().getHighestBlockYAt(loc);
                     for(int i = y; i > 1; i--) {
                         loc.setY(i);
                         Block bl = loc.getBlock();
-                        if(!(bl.isPassable() || bl.isEmpty() || bl.getType().toString().endsWith("LEAVES"))) break;
+                        if((!(bl.isPassable() || bl.isEmpty()
+                                || bl.getType().toString().endsWith("LEAVES"))) || bl.isLiquid()) break;
                     }
-                    loc.getBlock().setType(Material.STONE_SLAB);
+                    loc.setY(loc.getBlockY() + 1);
+                    loc.getBlock().setType(Material.TORCH);
                 }
 
                 time = System.currentTimeMillis();
-                while(!removeBorderBlocks.isEmpty() && ((System.currentTimeMillis() - time) < 30)) {
+                while(!removeBorderBlocks.isEmpty() && ((System.currentTimeMillis() - time) < 15)) {
                     Location loc = removeBorderBlocks.poll();
                     int y = 254;
                     for(int i = y; i > 1; i--) {
                         loc.setY(i);
                         Block bl = loc.getBlock();
-                        if(bl.getType() == Material.STONE_SLAB) break;
+                        if(bl.getType() == Material.TORCH) break;
                     }
                     loc.getBlock().setType(Material.AIR);
                 }
@@ -63,7 +66,15 @@ public class BorderManager {
         newBorderBlocks.add(loc);
     }
 
+    public void addBorderBlocks(Collection<Location> locs) {
+        newBorderBlocks.addAll(locs);
+    }
+
     public void removeBorderBlock(Location loc) {
         removeBorderBlocks.add(loc);
+    }
+
+    public void removeBorderBlocks(Collection<Location> locs) {
+        removeBorderBlocks.addAll(locs);
     }
 }

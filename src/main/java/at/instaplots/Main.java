@@ -1,7 +1,11 @@
 package at.instaplots;
 
+import at.instaplots.area.AreaManager;
+import at.instaplots.block.BlockManager;
 import at.instaplots.border.BorderManager;
 import at.instaplots.commands.CmdPlot;
+import at.instaplots.listeners.BlockBreakListener;
+import at.instaplots.plot.PlotManager;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import org.bukkit.Bukkit;
@@ -22,6 +26,15 @@ public class Main extends JavaPlugin {
     @Inject
     private BorderManager borderMgnt;
 
+    @Inject
+    private BlockManager blockMgnt;
+
+    @Inject
+    private PlotManager plotMgnt;
+
+    @Inject
+    private AreaManager areaMgnt;
+
     @Override
     public void onEnable() {
         super.onEnable();
@@ -30,8 +43,12 @@ public class Main extends JavaPlugin {
         injector.injectMembers(this);
 
         PluginManager mgnt = Bukkit.getPluginManager();
-        getCommand("plot").setExecutor(injector.getInstance(CmdPlot.class));
+        mgnt.registerEvents(injector.getInstance(BlockBreakListener.class), this);
+        this.getCommand("plot").setExecutor(injector.getInstance(CmdPlot.class));
 
+        plotMgnt.initDatabase();
+        areaMgnt.initDatabase();
+        blockMgnt.initDatabase();
         borderMgnt.runBorderBlockLoop();
     }
 

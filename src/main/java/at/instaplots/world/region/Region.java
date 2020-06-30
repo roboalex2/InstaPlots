@@ -1,13 +1,13 @@
 package at.instaplots.world.region;
 
-import at.instaplots.world.region.area.AreaManager;
+import at.instaplots.area.AreaSet;
 
 
 public class Region {
 
     private int x;
     private int z;
-    private AreaManager areaMgnt;
+    private AreaSet areaMgnt;
 
 
     Region(long regkey) {
@@ -23,9 +23,9 @@ public class Region {
         return z;
     }
 
-    public AreaManager getAreaManager() {
+    public AreaSet getAreaSet() {
         if(this.areaMgnt == null) {
-            this.areaMgnt = new AreaManager();
+            this.areaMgnt = new AreaSet();
         }
         return this.areaMgnt;
     }

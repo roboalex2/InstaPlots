@@ -5,13 +5,13 @@ import at.instaplots.world.region.RegionManager;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.bukkit.World;
+import java.util.concurrent.ConcurrentHashMap;
 
-import java.util.HashMap;
 
 @Singleton
 public class WorldManager {
 
-    private HashMap<String, RegionManager> worldRegions = new HashMap<>();
+    private ConcurrentHashMap<String, RegionManager> worldRegions = new ConcurrentHashMap<>();
 
     private Main plugin;
 

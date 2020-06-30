@@ -1,45 +1,25 @@
-package at.instaplots.world.region.area;
+package at.instaplots.selection;
 
-import at.instaplots.plot.Plot;
-import at.instaplots.plot.PlotManager;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
 import org.bukkit.Location;
 
-import java.util.UUID;
+public class Selection {
 
-public class Area {
-
-    private long id;
-    private long plotId;
-
-    private Location topLocation;
-    private Location bottomLocation;
-
-    @Inject
-    private PlotManager plotMgnt;
+    protected Location topLocation;
+    protected Location bottomLocation;
 
 
-    Area(Location pos1, Location pos2, Plot plot) {
+    protected Selection() {super();}
+
+
+    public Selection(Location pos1, Location pos2) {
         topLocation = new Location(pos1.getWorld(),
                 Math.max(pos1.getBlockX(), pos2.getBlockX()), 0, Math.max(pos1.getBlockZ(), pos2.getBlockZ()));
         bottomLocation = new Location(pos1.getWorld(),
                 Math.min(pos1.getBlockX(), pos2.getBlockX()), 0, Math.min(pos1.getBlockZ(), pos2.getBlockZ()));
-
-        id = UUID.randomUUID().getMostSignificantBits();
-        plotId = plot.getId();
-    }
-
-    // Only used by DAO when loading from Database
-    public Area(long id, long plotId, Location topLocation, Location bottomLocation) {
-        this.id = id;
-        this.plotId = plotId;
-        this.topLocation = topLocation;
-        this.bottomLocation = bottomLocation;
     }
 
 
-    public boolean isOverlapping(Area other) {
+    public boolean isOverlapping(Selection other) {
         if (topLocation.getBlockZ() < other.bottomLocation.getBlockZ()
                 || this.bottomLocation.getBlockZ() > other.topLocation.getBlockZ()) {
             return false;
@@ -52,7 +32,7 @@ public class Area {
     }
 
 
-    public boolean isTouching(Area other) {
+    public boolean isTouching(Selection other) {
         if(isOverlapping(other)) return false;
         if (topLocation.getBlockZ() < (other.bottomLocation.getBlockZ() - 1)
                 || this.bottomLocation.getBlockZ() > (other.topLocation.getBlockZ() + 1)) {
@@ -75,15 +55,25 @@ public class Area {
     }
 
 
-    public void injectAll(Injector injector) {
-        injector.injectMembers(this);
+    public Location getCenter() {
+        int dX2 = (topLocation.getBlockX() - bottomLocation.getBlockX()) / 2;
+        int dZ2 = (topLocation.getBlockZ() - bottomLocation.getBlockZ()) / 2;
+        return new Location(topLocation.getWorld(), bottomLocation.getBlockX() + dX2,
+                254, bottomLocation.getBlockZ() + dZ2);
     }
 
-    public long getId() {
-        return id;
+    public long getSize() {
+        Vector3D vec1 = new Vector3D(topLocation.getBlockX(), topLocation.getBlockY(), topLocation.getBlockZ());
+        Vector3D vec2 = new Vector3D(bottomLocation.getBlockX(), bottomLocation.getBlockY(), bottomLocation.getBlockZ());
+        vec1.sub(vec2);
+        return (long)(Math.abs(vec1.getX()) + 1) * (long)(Math.abs(vec1.getZ()) + 1);
     }
 
-    public long getPlotId() {
-        return plotId;
+    public Location getTopLocation() {
+        return topLocation;
+    }
+
+    public Location getBottomLocation() {
+        return bottomLocation;
     }
 }

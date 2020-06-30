@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.sql.SQLException;
 import java.util.UUID;
 
 public class CmdPlot implements CommandExecutor {
@@ -79,14 +80,24 @@ public class CmdPlot implements CommandExecutor {
                             return;
                         }
                     }
-                    plotMgnt.createPlot(target, player.getLocation(), size);
+                    try {
+                        plotMgnt.createPlot(target, player.getLocation(), size, false);
+                        sendPlotCreatedMessage(sender);
+                    } catch (RuntimeException | SQLException e) {
+                        sendErrorMessage(sender, e);
+                    }
                 }
             }).runTaskAsynchronously(plugin);
         } else {
             (new BukkitRunnable() {
                 @Override
                 public void run() {
-                    plotMgnt.createPlot(player.getUniqueId(), player.getLocation(), DEFAULT_PLOT_SIZE);
+                    try {
+                        plotMgnt.createPlot(player.getUniqueId(), player.getLocation(), DEFAULT_PLOT_SIZE);
+                        sendPlotCreatedMessage(sender);
+                    } catch (RuntimeException | SQLException e) {
+                        sendErrorMessage(sender, e);
+                    }
                 }
             }).runTaskAsynchronously(plugin);
         }
@@ -103,6 +114,14 @@ public class CmdPlot implements CommandExecutor {
 
     private void sendInvalidNumberMessage(CommandSender sender) {
         sendMessage(sender, "§7[§e!§7] §cEs wurde keine gültige Zahl eingegeben.");
+    }
+
+    private void sendErrorMessage(CommandSender sender, Exception exception) {
+        sendMessage(sender, "§7[§e!§7] §c" + exception.getMessage());
+    }
+
+    private void sendPlotCreatedMessage(CommandSender sender) {
+        sendMessage(sender, "§7[§e!§7] §7Das Plot wurde erfolgreich erstellt.");
     }
 
     private void sendMessage(CommandSender sender, String message) {
