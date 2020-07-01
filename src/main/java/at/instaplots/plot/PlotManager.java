@@ -13,10 +13,13 @@ import com.google.inject.Singleton;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+import java.security.Policy;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 @Singleton
 public class PlotManager {
@@ -25,7 +28,7 @@ public class PlotManager {
     private BlockManager blockMgnt;
     private AreaManager areaMgnt;
 
-    private HashMap<Long, Plot> plots = new HashMap<>();
+    private ConcurrentHashMap<Long, Plot> plots = new ConcurrentHashMap<>();
 
     @Inject
     public PlotManager(Main plugin, AreaManager areaMgnt, BlockManager blockMgnt) {
@@ -66,9 +69,9 @@ public class PlotManager {
             id = rs.getLong(1) + 1L;
         }
 
-        ConnectionManager.update("insert into Plots(id, server, home_world, home_x, home_y, home_z) " +
+        ConnectionManager.update("insert into Plots(id, server, home_world, home_x, home_y, home_z, home_yaw, home_pitch) " +
                 "values (" + id + ", '" + HazelcastManager.getServerName() + "', '" + loc.getWorld().getName() + "', " +
-                loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ");");
+                loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ", " + loc.getYaw() + ", " + loc.getPitch() + ");");
 
         Plot plot = new Plot(id, loc, plugin.getInjector());
         areaMgnt.createArea(selection, plot);
@@ -78,7 +81,29 @@ public class PlotManager {
 
 
     public void loadPlotsFromDB() {
-        
+        ResultSet rs = ConnectionManager.query("select * from Plots where server = '"
+                + HazelcastManager.getServerName() + "';");
+        try {
+            while (rs.next()) {
+                try {
+                    long id = rs.getLong("id");
+                    Location home = new Location(Bukkit.getWorld(rs.getString("home_world")),
+                            rs.getDouble("home_x"), rs.getDouble("home_y"), rs.getDouble("home_z"),
+                            (float) rs.getDouble("home_yaw"), (float) rs.getDouble("home_pitch"));
+
+                    Plot plot = new Plot(id, home, plugin.getInjector());
+                    areaMgnt.loadAreas(plot);
+                    plots.put(id, plot);
+
+                } catch (SQLException | RuntimeException e) {
+                    plugin.getLogger().log(Level.WARNING, "Error on Plot load: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error on loading all Plots. Disable Plugin.");
+        }
     }
 
 
@@ -104,9 +129,11 @@ public class PlotManager {
                     "    id         bigint       not null primary key,\n" +
                     "    server     varchar(128) not null,\n" +
                     "    home_world varchar(128) not null,\n" +
-                    "    home_x     integer      not null,\n" +
-                    "    home_y     integer      not null,\n" +
-                    "    home_z     integer      not null\n" +
+                    "    home_x     double       not null,\n" +
+                    "    home_y     double       not null,\n" +
+                    "    home_z     double       not null,\n" +
+                    "    home_yaw   double       not null,\n" +
+                    "    home_pitch double       not null\n" +
                     ");");
         } catch (SQLException e) {
             e.printStackTrace();

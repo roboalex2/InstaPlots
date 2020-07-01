@@ -4,7 +4,7 @@ description: InstaCube Plot System
 author: roboalex2
 version: ${project.version}
 api-version: 1.15
-load: STARTUP
+load: POSTWORLD
 depend: [InstaBaseAPI]
 commands:
   plot:

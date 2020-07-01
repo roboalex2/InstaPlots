@@ -49,6 +49,7 @@ public class Main extends JavaPlugin {
         plotMgnt.initDatabase();
         areaMgnt.initDatabase();
         blockMgnt.initDatabase();
+        plotMgnt.loadPlotsFromDB();
         borderMgnt.runBorderBlockLoop();
     }
 

@@ -9,7 +9,9 @@ import at.instaplots.world.region.Region;
 import at.instaplots.world.region.RegionManager;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -69,6 +71,31 @@ public class AreaManager {
         plot.getAreaSet().add(area);
         worldMgnt.getRegionManager(selection.getBottomLocation().getWorld())
                 .getRegion(selection.getCenter()).getAreaSet().add(area);
+    }
+
+
+    public void loadAreas(Plot plot) throws SQLException {
+
+
+        ResultSet rs = ConnectionManager.query("select * from Areas where plot_id = " + plot.getId() + ";");
+        boolean areaFound = false;
+
+        while(rs.next()) {
+            areaFound = true;
+            long id = rs.getLong("id");
+            long plotId = rs.getLong("plot_id");
+            World world = Bukkit.getWorld(rs.getString("world"));
+            Location top = new Location(world,
+                    rs.getInt("top_x"), 254, rs.getInt("top_z"));
+            Location bottom = new Location(world,
+                    rs.getInt("bottom_x"), 0, rs.getInt("bottom_z"));
+            Area area = new Area(id, plotId, top, bottom);
+            plot.getAreaSet().add(area);
+            worldMgnt.getRegionManager(world)
+                    .getRegion(area.getCenter()).getAreaSet().add(area);
+        }
+
+        if(!areaFound) throw new RuntimeException("Keine Area zu dem Plot gefunden! PlotId: " + plot.getId());
     }
 
 
