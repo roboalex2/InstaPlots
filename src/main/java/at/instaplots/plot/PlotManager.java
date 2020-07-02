@@ -73,7 +73,7 @@ public class PlotManager {
                 "values (" + id + ", '" + HazelcastManager.getServerName() + "', '" + loc.getWorld().getName() + "', " +
                 loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ", " + loc.getYaw() + ", " + loc.getPitch() + ");");
 
-        Plot plot = new Plot(id, loc, plugin.getInjector());
+        Plot plot = new Plot(id, plugin.getInjector());
         areaMgnt.createArea(selection, plot);
         plots.put(id, plot);
         plot.createBorder();
@@ -81,17 +81,17 @@ public class PlotManager {
 
 
     public void loadPlotsFromDB() {
-        ResultSet rs = ConnectionManager.query("select * from Plots where server = '"
+        ResultSet rs = ConnectionManager.query("select id from Plots where server = '"
                 + HazelcastManager.getServerName() + "';");
         try {
             while (rs.next()) {
                 try {
                     long id = rs.getLong("id");
-                    Location home = new Location(Bukkit.getWorld(rs.getString("home_world")),
+                   /* Location home = new Location(Bukkit.getWorld(rs.getString("home_world")),
                             rs.getDouble("home_x"), rs.getDouble("home_y"), rs.getDouble("home_z"),
-                            (float) rs.getDouble("home_yaw"), (float) rs.getDouble("home_pitch"));
+                            (float) rs.getDouble("home_yaw"), (float) rs.getDouble("home_pitch"));*/
 
-                    Plot plot = new Plot(id, home, plugin.getInjector());
+                    Plot plot = new Plot(id, plugin.getInjector());
                     areaMgnt.loadAreas(plot);
                     plots.put(id, plot);
 

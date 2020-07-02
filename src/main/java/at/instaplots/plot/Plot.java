@@ -19,11 +19,8 @@ public class Plot {
     private GeneralPermissionManager genPermMgnt;
     private BorderManager borderMgnt;
 
-    private Location home;
-
-    Plot(long id, Location home, Injector injector) {
+    Plot(long id, Injector injector) {
         this.id = id;
-        this.home = home;
         this.areaSet = injector.getInstance(AreaSet.class);
         this.groupMgnt = injector.getInstance(GroupManager.class);
         this.genPermMgnt = injector.getInstance(GeneralPermissionManager.class);
