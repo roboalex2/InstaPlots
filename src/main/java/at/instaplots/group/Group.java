@@ -1,6 +1,8 @@
 package at.instaplots.group;
 
-import at.instaplots.group.permissions.PlayerPermissions;
+import at.instaplots.group.permissions.player.block.BlockPermissions;
+import at.instaplots.group.permissions.player.entity.EntityPermissions;
+import at.instaplots.group.permissions.player.general.GeneralPermissions;
 
 import java.util.HashSet;
 import java.util.UUID;
@@ -8,7 +10,9 @@ import java.util.UUID;
 public class Group {
 
     private HashSet<UUID> players = new HashSet<>();
-    private PlayerPermissions playerPerms;
+    private EntityPermissions playerEntityPerms;
+    private BlockPermissions playerBlockPerms;
+    private GeneralPermissions playerPerms;
 
 
     public boolean contains(UUID uuid) {
