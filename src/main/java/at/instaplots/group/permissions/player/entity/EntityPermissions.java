@@ -3,6 +3,7 @@ package at.instaplots.group.permissions.player.entity;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 
 import java.util.Collections;
 import java.util.Set;
@@ -10,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class EntityPermissions {
 
-    private ConcurrentHashMap<Material, SpecificPermission> permsPerEntityType = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<EntityType, SpecificPermission> permsPerEntityType = new ConcurrentHashMap<>();
     private Set<EntityPermissions.Permission> basePermissionEntity = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
 
@@ -41,6 +42,44 @@ public class EntityPermissions {
         }
 
         return basePermissionEntity.contains(EntityPermissions.Permission.HIT_BY_MOBS);
+    }
+
+
+    public void grantPermission(Permission perm) {
+        basePermissionEntity.add(perm);
+    }
+
+
+    public void revokePermission(Permission perm) {
+        basePermissionEntity.remove(perm);
+    }
+
+
+    public void grantPermission(Permission perm, EntityType type) {
+        SpecificPermission entPerms = permsPerEntityType.get(type);
+        if(entPerms == null) {
+            entPerms = new SpecificPermission();
+            permsPerEntityType.put(type, entPerms);
+        }
+        entPerms.setPermission(perm, true);
+    }
+
+
+    public void revokePermission(Permission perm, EntityType type) {
+        SpecificPermission entPerms = permsPerEntityType.get(type);
+        if(entPerms == null) {
+            entPerms = new SpecificPermission();
+            permsPerEntityType.put(type, entPerms);
+        }
+        entPerms.setPermission(perm, false);
+    }
+
+
+    public void unsetPermission(Permission perm, EntityType type) {
+        SpecificPermission entPerms = permsPerEntityType.get(type);
+        if(entPerms != null) {
+            entPerms.unsetPermission(perm);
+        }
     }
 
 

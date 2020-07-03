@@ -42,6 +42,45 @@ public class BlockPermissions {
     }
 
 
+
+    public void grantPermission(Permission perm) {
+        basePermissionBlock.add(perm);
+    }
+
+
+    public void revokePermission(Permission perm) {
+        basePermissionBlock.remove(perm);
+    }
+
+
+    public void grantPermission(Permission perm, Material type) {
+        SpecificPermission matPerms = permsPerMaterial.get(type);
+        if(matPerms == null) {
+            matPerms = new SpecificPermission();
+            permsPerMaterial.put(type, matPerms);
+        }
+        matPerms.setPermission(perm, true);
+    }
+
+
+    public void revokePermission(Permission perm, Material type) {
+        SpecificPermission matPerms = permsPerMaterial.get(type);
+        if(matPerms == null) {
+            matPerms = new SpecificPermission();
+            permsPerMaterial.put(type, matPerms);
+        }
+        matPerms.setPermission(perm, false);
+    }
+
+
+    public void unsetPermission(Permission perm, Material type) {
+        SpecificPermission matPerms = permsPerMaterial.get(type);
+        if(matPerms != null) {
+            matPerms.unsetPermission(perm);
+        }
+    }
+
+
     public enum Permission {
         BLOCK_BREAK("BLOCK_BREAK"),
         BLOCK_PLACE("BLOCK_PLACE"),
