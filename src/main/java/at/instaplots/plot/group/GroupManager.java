@@ -1,7 +1,6 @@
-package at.instaplots.group;
+package at.instaplots.plot.group;
 
-import at.instaplots.Main;
-import com.google.inject.Inject;
+import at.instaplots.plot.group.Group;
 
 import java.util.UUID;
 

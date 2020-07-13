@@ -2,8 +2,7 @@ package at.instaplots.plot;
 
 import at.instaplots.area.Area;
 import at.instaplots.border.BorderManager;
-import at.instaplots.group.GroupManager;
-import at.instaplots.permission.GeneralPermissionManager;
+import at.instaplots.plot.group.GroupManager;
 import at.instaplots.area.AreaSet;
 import com.google.inject.Injector;
 import org.bukkit.Location;
@@ -16,14 +15,14 @@ public class Plot {
 
     private AreaSet areaSet;
     private GroupManager groupMgnt;
-    private GeneralPermissionManager genPermMgnt;
+    private PlotSettings genPermMgnt;
     private BorderManager borderMgnt;
 
     Plot(long id, Injector injector) {
         this.id = id;
         this.areaSet = injector.getInstance(AreaSet.class);
         this.groupMgnt = injector.getInstance(GroupManager.class);
-        this.genPermMgnt = injector.getInstance(GeneralPermissionManager.class);
+        this.genPermMgnt = injector.getInstance(PlotSettings.class);
         this.borderMgnt = injector.getInstance(BorderManager.class);
     }
 

@@ -1,10 +1,10 @@
-package at.instaplots.group.permissions.player.general;
+package at.instaplots.plot.group.permissions.general;
 
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GeneralPermissions {
+public class PlayerGeneralPermissions {
     private Set<Permission> permissions = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
 
@@ -39,7 +39,17 @@ public class GeneralPermissions {
 
 
     public boolean canSetHome() {
-        return permissions.contains(Permission.SETHOME);
+        return permissions.contains(Permission.SET_HOME);
+    }
+
+
+    public boolean canSetPlotHome() {
+        return permissions.contains(Permission.SET_PLOT_HOME);
+    }
+
+
+    public boolean canChangePlotSettings() {
+        return permissions.contains(Permission.CHANGE_PLOT_SETTINGS);
     }
 
 
@@ -135,7 +145,9 @@ public class GeneralPermissions {
         DROP_ITEMS("DROP_ITEMS"),
         PICKUP_ITEMS("PICKUP_ITEMS"),
         FLY("FLY"),
-        SETHOME("SETHOME"),
+        SET_HOME("SET_HOME"),
+        SET_PLOT_HOME("SET_PLOT_HOME"),
+        CHANGE_PLOT_SETTINGS("CHANGE_PLOT_SETTINGS"),
         CREATE_BORDER("CREATE_BORDER"),
         REMOVE_BORDER("REMOVE_BORDER"),
         EDIT_AREAS("EDIT_AREAS"),

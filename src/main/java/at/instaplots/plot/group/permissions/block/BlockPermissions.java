@@ -1,4 +1,4 @@
-package at.instaplots.group.permissions.player.block;
+package at.instaplots.plot.group.permissions.block;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
